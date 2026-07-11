@@ -65,3 +65,7 @@ warn_unused_configs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = ["headroom", "headroom.*"]
+ignore_missing_imports = true
