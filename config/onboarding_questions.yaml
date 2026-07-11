@@ -1,0 +1,117 @@
+version: 1
+agent: onboarding
+behavior:
+  proactive: true
+  adaptive: true
+  explain_question_rationale: true
+  summarize_after_section: true
+  allow_explicit_assumptions: true
+  block_workflow_on_missing_mandatory_answers: true
+
+sections:
+  - id: business_scope
+    title: Business scope
+    mandatory: true
+    questions:
+      - id: migration_goal
+        prompt: What business outcome must this migration achieve?
+        type: multi_select
+        options: [modernization, cost_reduction, performance, analytics, ai_ml, platform_consolidation, regulatory]
+      - id: success_metrics
+        prompt: Which measurable criteria will define migration success?
+        type: long_text
+
+  - id: source_scope
+    title: Source landscape
+    mandatory: true
+    questions:
+      - id: source_systems
+        prompt: Which source platforms and environments are in scope?
+        type: multi_select
+        options: [cloudera, airflow, ssis, sap_bobj, powercenter, snowflake, teradata, oracle, db2, sap_bw_hana, other]
+      - id: selected_objects
+        prompt: Should the factory migrate all discovered objects or only an approved subset?
+        type: single_select
+        options: [all_discovered, approved_subset, discovery_first]
+
+  - id: target_platform
+    title: Target platform
+    mandatory: true
+    questions:
+      - id: target
+        prompt: Which destination should be prepared?
+        type: single_select
+        options: [microsoft_fabric, databricks, dual_target]
+      - id: target_architecture
+        prompt: Is there an approved target architecture, naming standard, workspace model or landing-zone definition?
+        type: artifact_or_text
+
+  - id: workload
+    title: Workload characteristics
+    mandatory: true
+    questions:
+      - id: workload_types
+        prompt: Which workload patterns must be supported?
+        type: multi_select
+        options: [batch, streaming, bi, semantic_models, machine_learning, data_science, operational_reporting]
+      - id: nfr
+        prompt: Provide expected volume, growth, latency, concurrency, retention and availability targets.
+        type: structured_metrics
+
+  - id: security
+    title: Security and governance
+    mandatory: true
+    questions:
+      - id: classifications
+        prompt: Which data classifications are present?
+        type: multi_select
+        options: [public, internal, confidential, restricted, pii, phi, pci, financial]
+      - id: residency
+        prompt: Are there data-residency, sovereignty or private-connectivity requirements?
+        type: long_text
+      - id: production_data_for_testing
+        prompt: May production data be used outside production for migration testing?
+        type: single_select
+        options: [no, masked_only, approved_subset_only]
+        default: no
+
+  - id: synthetic_data
+    title: Synthetic test data
+    mandatory: true
+    questions:
+      - id: synthetic_scope
+        prompt: Which schemas, tables and business scenarios require synthetic datasets?
+        type: long_text
+      - id: fidelity
+        prompt: What fidelity must synthetic data preserve?
+        type: multi_select
+        options: [schema, referential_integrity, distributions, correlations, edge_cases, temporal_patterns, business_rules]
+      - id: prohibited_fields
+        prompt: Which attributes must never be derived from production values?
+        type: long_text
+
+  - id: execution
+    title: Migration execution
+    mandatory: true
+    questions:
+      - id: migration_pattern
+        prompt: Which migration patterns are required?
+        type: multi_select
+        options: [full_load, incremental, cdc, parallel_run, phased_cutover, big_bang]
+      - id: acceptance
+        prompt: Define row-count, checksum, aggregate and business-rule acceptance thresholds.
+        type: structured_thresholds
+      - id: approvers
+        prompt: Who can approve assumptions, target mappings, test evidence and production cutover?
+        type: people
+
+readiness:
+  statuses: [blocked, needs_review, ready]
+  mandatory_sections:
+    - business_scope
+    - source_scope
+    - target_platform
+    - workload
+    - security
+    - synthetic_data
+    - execution
