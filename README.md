@@ -5,7 +5,7 @@ Scaffold generated from `migration_agent_checklist.xlsx`: **10 systems**, **110 
 ## Covered systems
 - Cloudera
 - Airflow
-- ⚠ SSS
+- SYSS
 - SAP BOBJ
 - PowerCenter
 - Snowflake
