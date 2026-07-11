@@ -27,7 +27,7 @@ jobs:
       - name: Ruff SDK and tests
         run: ruff check src/migration_sdk tests
       - name: Mypy SDK
-        run: mypy src/migration_sdk
+        run: mypy
       - name: Pytest
         run: pytest -q
       - name: Build distributions
