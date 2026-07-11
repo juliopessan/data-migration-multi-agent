@@ -1,41 +1,55 @@
 # Data Migration Multi-Agent Factory
 
-Scaffold generated from `migration_agent_checklist.xlsx`: **10 systems**, **110 file patterns**, and **105 migration tasks**.
+Enterprise AI-first migration platform targeting **Microsoft Fabric** and **Databricks**.
 
-## Covered systems
-- Cloudera
-- Airflow
-- SYSS
-- SAP BOBJ
-- PowerCenter
-- Snowflake
-- Teradata
-- Oracle Exadata - ADW
-- IBM Db2 Warehouse
-- SAP BW - HANA
+## Highlights
+- Python SDK with pluggable agents and connectors
+- Markdown/YAML agent definitions
+- Mandatory adaptive onboarding agent
+- Microsoft Fabric and Databricks as first-class targets
+- Synthetic data generation with referential integrity
+- Native telemetry (tokens, latency, cost, quality)
+- Budget gates and economic policies
+- Optional Headroom optimization layer
+- Approval workflow and audit evidence
 
-## Agent topology
-1. Supervisor — controls state, policy gates and retries.
-2. Discovery — inventories files, schemas, jobs and dependencies.
-3. Platform specialists — interpret each source system.
-4. Schema mapper — proposes source-to-target mappings.
-5. Transformation engineer — generates SQL/Python conversion assets.
-6. Synthetic data — creates referentially consistent, PII-safe test datasets.
-7. Execution planner — builds dependency-aware migration waves.
-8. Data quality — profiles, validates and compares source/target.
-9. Reconciliation — row counts, checksums, aggregates and business rules.
-10. Security/governance — secrets, policies, lineage and approval checks.
-11. Evidence/audit — writes an immutable run manifest and artifacts.
+## Architecture
+Runtime (Python SDK)
+- Agent Runtime
+- Plugin Registry
+- Workflow Engine
+- Budget Engine
+- Telemetry
 
-## Run locally
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-pytest
-migration-agents dry-run --system Snowflake
-uvicorn migration_agents.api:app --reload
-```
+Declarative Layer
+- prompt.md
+- agent.yaml
+- policies.yaml
+- schemas
 
-## Important boundary
-The initial implementation is a safe control-plane scaffold. It inventories and plans migrations, generates synthetic test data, and emits validation evidence. Production connectors and target-specific execution commands must be enabled explicitly after credentials, network paths, target platform, and approval policy are configured.
+## Workflow
+Onboarding → Discovery → Mapping → Target Planning → Synthetic Data → Validation → Reconciliation → Approval → Execution
+
+## Financial-first design
+Every LLM call is measured before and after execution.
+
+Tracked metrics:
+- input/output tokens
+- cached tokens
+- estimated cost
+- latency
+- compression ratio
+- cost per migration
+- cost per migrated object
+
+Compression is optional. If Headroom does not achieve the configured savings threshold or quality gates fail, the runtime automatically falls back to the original context.
+
+## Roadmap
+- Source connectors
+- Fabric deployment engine
+- Databricks deployment engine
+- GitHub Actions CI
+- OpenTelemetry
+- Azure Monitor
+- Application Insights
+- Benchmark suite
