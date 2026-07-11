@@ -1,0 +1,32 @@
+telemetry:
+  enabled: true
+  redact_payloads: true
+  capture_prompt_content: false
+  dimensions:
+    - run_id
+    - agent_name
+    - source_system
+    - target_platform
+    - model
+    - workflow_stage
+
+budgets:
+  max_input_tokens_per_call: 32000
+  max_output_tokens_per_call: 8000
+  max_cost_per_call_usd: 1.00
+  max_cost_per_run_usd: 25.00
+  fail_closed: true
+
+optimization:
+  provider: headroom
+  enabled: true
+  optional_dependency: true
+  min_compression_savings_ratio: 0.10
+  quality_holdout_ratio: 0.10
+  reversible_compression: true
+  fallback_to_original: true
+
+quality_gates:
+  require_reconciliation_parity: true
+  max_accuracy_delta: 0.01
+  disable_optimizer_on_regression: true
