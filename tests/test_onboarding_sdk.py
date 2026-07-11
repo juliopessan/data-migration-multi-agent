@@ -10,6 +10,21 @@ def test_onboarding_blocks_missing_target():
     assert "targets" in questions
 
 
+def test_sensitive_data_without_residency_is_blocked():
+    answers = {
+        "project_name": "regulated-migration",
+        "source_systems": ["oracle"],
+        "targets": ["microsoft_fabric"],
+        "fabric_storage_mode": "lakehouse",
+        "contains_sensitive_data": True,
+        "production_data_allowed_for_testing": False,
+        "synthetic_data_required": True,
+    }
+    intake = OnboardingAgent().build_intake(answers)
+    assert intake.readiness is Readiness.BLOCKED
+    assert "data_residency" in OnboardingAgent().next_questions(answers)
+
+
 def test_dual_target_intake_is_ready():
     answers = {
         "project_name": "enterprise-migration",

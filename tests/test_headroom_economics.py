@@ -1,7 +1,7 @@
 import pytest
 
 from migration_sdk.economics.budget import BudgetExceededError, BudgetPolicy
-from migration_sdk.optimization.headroom import HeadroomOptimizer
+from migration_sdk.optimization.headroom import HeadroomOptimizer, HeadroomUnavailableError
 from migration_sdk.telemetry.events import CostEstimate, TokenUsage
 from migration_sdk.telemetry.sink import InMemoryTelemetrySink
 
@@ -33,6 +33,12 @@ def test_headroom_falls_back_when_savings_are_too_small():
     result = optimizer.optimize(original)
     assert result.applied is False
     assert result.messages == original
+
+
+def test_headroom_missing_dependency_is_explicit():
+    optimizer = HeadroomOptimizer(token_counter=count_tokens)
+    with pytest.raises(HeadroomUnavailableError):
+        optimizer.optimize([{"role": "user", "content": "safe original context"}])
 
 
 def test_budget_can_fail_closed():
