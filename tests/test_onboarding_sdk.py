@@ -1,0 +1,43 @@
+from migration_sdk.contracts.intake import Readiness
+from migration_sdk.plugins.onboarding import OnboardingAgent
+from migration_sdk.targets.databricks import DatabricksTargetAdapter
+from migration_sdk.targets.fabric import FabricTargetAdapter
+
+
+def test_onboarding_blocks_missing_target():
+    agent = OnboardingAgent()
+    questions = agent.next_questions({"project_name": "demo", "source_systems": ["snowflake"]})
+    assert "targets" in questions
+
+
+def test_dual_target_intake_is_ready():
+    answers = {
+        "project_name": "enterprise-migration",
+        "source_systems": ["snowflake", "oracle"],
+        "targets": ["microsoft_fabric", "databricks"],
+        "fabric_storage_mode": "lakehouse",
+        "unity_catalog_enabled": True,
+        "contains_sensitive_data": True,
+        "data_residency": "brazil-south",
+        "production_data_allowed_for_testing": False,
+        "synthetic_data_required": True,
+    }
+    intake = OnboardingAgent().build_intake(answers)
+    assert intake.readiness is Readiness.READY
+    assert len(intake.targets) == 2
+    assert FabricTargetAdapter().deployment_plan(intake.targets[0])
+    assert DatabricksTargetAdapter().deployment_plan(intake.targets[1])
+
+
+def test_assumptions_require_review():
+    answers = {
+        "project_name": "review",
+        "source_systems": ["teradata"],
+        "targets": ["databricks"],
+        "unity_catalog_enabled": True,
+        "contains_sensitive_data": False,
+        "production_data_allowed_for_testing": True,
+        "synthetic_data_required": False,
+        "assumptions": ["CDC mechanism pending confirmation"],
+    }
+    assert OnboardingAgent().build_intake(answers).readiness is Readiness.NEEDS_REVIEW
