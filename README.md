@@ -4,6 +4,8 @@
 
 An AI-first, financially governed migration SDK for preparing and validating enterprise data workloads targeting **Microsoft Fabric** and **Databricks**.
 
+Developer tools: see [RTK Integration](RTK.md) for repository helpers to install and initialize the `rtk` CLI for token-optimized command output and developer workflows.
+
 The platform combines a typed Python runtime, declarative agent definitions, extensible plugins, synthetic test data, native telemetry, token budgets, and optional Headroom context compression.
 
 ## Design principles
