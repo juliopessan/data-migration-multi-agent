@@ -10,7 +10,7 @@ Build and evolve a safe, auditable multi-agent data migration factory. Preserve 
 - Secrets stay in environment variables or a secret manager.
 - Add tests for every adapter and orchestration state transition.
 - Keep platform-specific behavior behind adapters.
-- Produce machine-readable evidence in `artifacts/<run_id>/`.
+- Produce machine-readable evidence in `outputs/<pipeline>/<run_id>/`.
 
 ## Definition of done
 `pytest` passes; dry-run completes; artifacts include inventory, mapping, plan, validation and audit records; no credentials or production data are committed.

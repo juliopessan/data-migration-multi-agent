@@ -56,11 +56,27 @@ class HeadroomOptimizer:
 
     def optimize(self, messages: Sequence[dict[str, Any]]) -> CompressionResult:
         before = self._token_counter(messages)
-        compressed = self._load_compressor()(messages)
-        after = self._token_counter(compressed)
+        # If no explicit compressor was provided at construction, fail fast with an explicit error
+        # rather than implicitly importing runtime dependencies. This keeps behavior deterministic
+        # for test environments and CI where optional deps may be missing.
+        if self._compressor is None:
+            raise HeadroomUnavailableError(
+                "Install the optional dependency with: pip install 'data-migration-multi-agent[headroom]'"
+            )
+
+        compressor = self._load_compressor()
+        compressed_result = compressor(messages)
+
+        # Compressor may return either a Sequence[dict] or a CompressResult-like object
+        if hasattr(compressed_result, "messages"):
+            compressed_messages = compressed_result.messages
+        else:
+            compressed_messages = compressed_result
+
+        after = self._token_counter(compressed_messages)
         economic = self._budget_policy.compression_is_economic(before, after)
         return CompressionResult(
-            messages=compressed if economic else messages,
+            messages=compressed_messages if economic else messages,
             tokens_before=before,
             tokens_after=after if economic else before,
             applied=economic,

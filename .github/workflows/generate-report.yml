@@ -1,0 +1,77 @@
+name: Generate Migration Report
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/**'
+      - 'templates/**'
+      - 'requirements.txt'
+
+jobs:
+  build-report:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - pipeline: cloudera-fabric
+            synthetic_script: scripts/generate_cloudera_synthetic_data.py
+            simulate_script: scripts/simulate_cloudera_fabric_migration.py
+            report_script: scripts/generate_migration_report.py
+            output_dir: outputs/cloudera-fabric
+          - pipeline: snowflake-databricks
+            synthetic_script: scripts/generate_snowflake_synthetic_data.py
+            simulate_script: scripts/simulate_snowflake_databricks_migration.py
+            report_script: scripts/generate_snowflake_migration_report.py
+            output_dir: outputs/snowflake-databricks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install RTK (from rtk-ai)
+        run: |
+          echo "Installing RTK from rtk-ai/rtk (verify name collision per docs)"
+          cargo install --git https://github.com/rtk-ai/rtk || true
+
+      - name: Verify RTK
+        run: |
+          rtk --version
+          echo "Checking rtk gain output for correct Token Killer RTK (not Type Kit)..."
+          OUTPUT=$(rtk gain 2>&1) || true
+          echo "$OUTPUT"
+          if ! echo "$OUTPUT" | grep -qi "savings"; then
+            echo "::error::Wrong RTK detected! Expected 'rtk gain' to report token savings (rtk-ai/rtk), but got output above. This looks like the wrong 'rtk' (e.g. Rust Type Kit). Failing build."
+            exit 1
+          fi
+          echo "Correct RTK (Token Killer) verified."
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate synthetic data (via rtk)
+        run: rtk python ${{ matrix.synthetic_script }}
+
+      - name: Simulate migration plan (via rtk)
+        run: rtk python ${{ matrix.simulate_script }}
+
+      - name: Generate migration report (via rtk)
+        run: rtk python ${{ matrix.report_script }}
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.pipeline }}-report
+          path: ${{ matrix.output_dir }}/migration_report.html
+

@@ -1,0 +1,106 @@
+{
+  "page_title": "Novo Projeto | Dashboard Executivo",
+  "page_description": "Plano executivo do novo projeto",
+  "loading_text": "Inicializando dashboard...",
+  "logo_text": "Projeto",
+  "logo_suffix": "2026",
+  
+  "nav_links": [
+    { "label": "Visão Geral", "href": "#top" },
+    { "label": "Fases", "href": "#fases" },
+    { "label": "Impacto", "href": "#impacto" },
+    { "label": "Dados", "href": "#dados" }
+  ],
+  
+  "eyebrow": "NOVO PROJETO",
+  "hero_title": "Seu Projeto <span class=\"word\">Aqui</span>",
+  "hero_subtitle": "Descrição breve do projeto e seus objetivos principais.",
+  
+  "hero_buttons": [
+    { "label": "Ver detalhes →", "href": "#fases", "style": "primary" },
+    { "label": "Documentação →", "href": "#", "style": "ghost" }
+  ],
+  
+  "metrics": [
+    { "value": "X", "label": "Métrica 1", "emphasize": false },
+    { "value": "Y", "label": "Métrica 2", "emphasize": true },
+    { "value": "Z", "label": "Métrica 3", "emphasize": false },
+    { "value": "W", "label": "Métrica 4", "emphasize": false }
+  ],
+  
+  "meter_title": "Status do Projeto",
+  "meter_subtitle": "Métricas-chave",
+  
+  "sections": [
+    {
+      "type": "benefits",
+      "label": "BENEFÍCIOS",
+      "title": "Principais Vantagens",
+      "intro": "Este projeto oferece benefícios significativos para a organização.",
+      "items": [
+        {
+          "emoji": "⚡",
+          "title": "Benefício 1",
+          "description": "Descrição do primeiro benefício"
+        },
+        {
+          "emoji": "📈",
+          "title": "Benefício 2",
+          "description": "Descrição do segundo benefício"
+        },
+        {
+          "emoji": "🔒",
+          "title": "Benefício 3",
+          "description": "Descrição do terceiro benefício"
+        },
+        {
+          "emoji": "🚀",
+          "title": "Benefício 4",
+          "description": "Descrição do quarto benefício"
+        }
+      ]
+    },
+    {
+      "type": "impact",
+      "label": "IMPACTO",
+      "title": "Impacto Esperado",
+      "items": [
+        {
+          "value": "1.2M",
+          "description": "Primeira métrica de impacto"
+        },
+        {
+          "value": "45%",
+          "description": "Segunda métrica de impacto"
+        },
+        {
+          "value": "3.6TB",
+          "description": "Terceira métrica de impacto"
+        },
+        {
+          "value": "5min",
+          "description": "Quarta métrica de impacto"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "label": "DADOS",
+      "title": "Inventário de Dados",
+      "columns": ["Item", "Valor 1", "Valor 2", "Status"],
+      "rows": [
+        ["Linha 1", "X", "Y", { "value": "✓", "class": "badge" }],
+        ["Linha 2", "A", "B", { "value": "✓", "class": "badge" }],
+        ["Linha 3", "C", "D", { "value": "✓", "class": "badge" }]
+      ]
+    }
+  ],
+  
+  "cta_title": "Próximos Passos",
+  "cta_subtitle": "Clique para acessar a documentação técnica completa e guias de implementação.",
+  "cta_link": "#",
+  "cta_button_text": "Acessar Guia Completo →",
+  
+  "footer_left": "© 2026 - Avanade",
+  "footer_right": "Atualizado em 2026-07-13"
+}
